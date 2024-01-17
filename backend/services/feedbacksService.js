@@ -11,6 +11,12 @@ const createFeedback = async (feedbackData) => {
     }
 };
 
+const getFeedbacksByPId = (pid) => {
+    const list = Feedbacks.find({ PoliceId: pid })
+    return list;
+
+}
 
 
-module.exports = { createFeedback };
+
+module.exports = { createFeedback,getFeedbacksByPId };

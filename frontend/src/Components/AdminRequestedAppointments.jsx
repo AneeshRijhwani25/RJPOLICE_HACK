@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // Importing jwt directly from the 'jsonwebtoken' library
 
 const AdminRequestedAppointments = () => {
   const [requestedAppointments, setRequestedAppointments] = useState([]);
@@ -12,30 +12,30 @@ const AdminRequestedAppointments = () => {
         const response = await fetch(`http://localhost:3005/appointments/id/${id}`);
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
           return data;
         } else {
           console.error(`Failed to fetch data for appointment ID ${id}`);
           return null;
         }
       });
-  
+
       // Wait for all fetch requests to complete
       const results = await Promise.all(fetchPromises);
-  
+
       // Filter out any null results (failed fetches)
       const validResults = results.filter((result) => result !== null);
-  
+
       return validResults;
     } catch (error) {
       console.error("Error during fetch:", error);
       throw error;
     }
   };
+
   const fetchRequestedAppointments = async () => {
     try {
       const token = localStorage.getItem("token");
-  
+
       if (token) {
         try {
           const decodedToken = jwt.decode(token);
@@ -46,13 +46,11 @@ const AdminRequestedAppointments = () => {
       } else {
         console.error("Token not found in localStorage");
       }
-  
+
       // Only make the API call if policeId is not empty
       if (policeId) {
-        const response = await fetch(
-          `http://localhost:3005/police/reqappointments/${policeId}`
-        );
-        
+        const response = await fetch(`http://localhost:3005/police/reqappointments/${policeId}`);
+
         if (response.ok) {
           const data = await response.json();
           const fetchedData = await fetchDataByIds(data.data);
@@ -66,8 +64,6 @@ const AdminRequestedAppointments = () => {
     }
   };
 
-
-
   useEffect(() => {
     fetchRequestedAppointments();
   }, [policeId]);
@@ -75,7 +71,7 @@ const AdminRequestedAppointments = () => {
   const handleAccept = async (id) => {
     try {
       // Make an API call to update the appointment status to accepted
-      await fetch(`http://localhost:3005/appointments/confirm`, {
+      await fetch("http://localhost:3005/appointments/confirm", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +80,7 @@ const AdminRequestedAppointments = () => {
           appointmentId: id,
         }),
       });
-  
+
       // After a successful update, fetch the updated list of requested appointments
       fetchRequestedAppointments();
     } catch (error) {
@@ -95,14 +91,14 @@ const AdminRequestedAppointments = () => {
   const handleReject = async (userId) => {
     try {
       // Make an API call to update the appointment status to rejected
-      // await fetch(`http://localhost:3005/appointments/reject/${userId}`, {
+      // await fetch(http://localhost:3005/appointments/reject/${userId}, {
       //   method: "PUT",
       //   headers: {
       //     "Content-Type": "application/json",
       //   },
       // });
 
-      // After successful update, fetch updated list of requested appointments
+      // After a successful update, fetch the updated list of requested appointments
       fetchRequestedAppointments();
     } catch (error) {
       console.error("Error rejecting appointment:", error);
@@ -111,37 +107,31 @@ const AdminRequestedAppointments = () => {
 
   return (
     <div>
-      <h2>Requested Appointments</h2>
-      <table className="border-collapse border border-green-800">
+      <h2 className="text-2xl font-bold mb-4 text-green-500">Requested Appointments</h2>
+      <table className="min-w-full bg-white border border-green-800">
         <thead>
-          <tr>
-            <th className="border border-green-800 p-2">User ID</th>
-            <th className="border border-green-800 p-2">Date</th>
-            <th className="border border-green-800 p-2">Time</th>
-            <th className="border border-green-800 p-2">Actions</th>
+          <tr className="bg-gray-100">
+            <th className="py-2 px-4 border-b border-green-800">User ID</th>
+            <th className="py-2 px-4 border-b border-green-800">Date</th>
+            <th className="py-2 px-4 border-b border-green-800">Time</th>
+            <th className="py-2 px-4 border-b border-green-800">Actions</th>
           </tr>
         </thead>
         <tbody>
           {requestedAppointments.map((appointment) => (
             <tr key={appointment.UserId}>
-              <td className="border border-green-800 p-2">
-                {appointment.UserId}
-              </td>
-              <td className="border border-green-800 p-2">
-                {appointment.date}
-              </td>
-              <td className="border border-green-800 p-2">
-                {appointment.time}
-              </td>
-              <td className="border border-green-800 p-2">
+              <td className="py-2 px-4 border-b border-green-800">{appointment.UserId}</td>
+              <td className="py-2 px-4 border-b border-green-800">{appointment.date}</td>
+              <td className="py-2 px-4 border-b border-green-800">{appointment.time}</td>
+              <td className="py-2 px-4 border-b border-green-800">
                 <button
-                  className="bg-green-500 text-white px-4 py-2 mr-2"
+                  className="bg-green-500 text-white px-2 py-1 rounded-full"
                   onClick={() => handleAccept(appointment._id)}
                 >
                   Accept
                 </button>
                 {/* <button
-                  className="bg-red-500 text-white px-4 py-2"
+                  className="bg-red-500 text-white px-4 py-2 rounded"
                   onClick={() => handleReject(appointment.userId)}
                 >
                   Reject

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // Importing jwt directly from the 'jsonwebtoken' library
 
 const AdminConfirmedAppointments = () => {
   const [confirmedAppointments, setConfirmedAppointments] = useState([]);
@@ -47,9 +47,7 @@ const AdminConfirmedAppointments = () => {
 
       // Only make the API call if policeId is not empty
       if (policeId) {
-        const response = await fetch(
-          `http://localhost:3005/police/conappointments/${policeId}`
-        );
+        const response = await fetch(`http://localhost:3005/police/conappointments/${policeId}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -70,21 +68,21 @@ const AdminConfirmedAppointments = () => {
 
   return (
     <div>
-      <h2>Confirmed Appointments</h2>
-      <table className="border-collapse border border-green-800">
+      <h2 className="text-2xl font-bold mb-4 text-green-500">Confirmed Appointments</h2>
+      <table className="min-w-full bg-white border border-green-800">
         <thead>
-          <tr>
-            <th className="border border-green-800 p-2">User ID</th>
-            <th className="border border-green-800 p-2">Date</th>
-            <th className="border border-green-800 p-2">Time</th>
+          <tr className="bg-gray-100">
+            <th className="py-2 px-4 border-b border-green-800">User ID</th>
+            <th className="py-2 px-4 border-b border-green-800">Date</th>
+            <th className="py-2 px-4 border-b border-green-800">Time</th>
           </tr>
         </thead>
         <tbody>
           {confirmedAppointments.map((appointment) => (
             <tr key={appointment.UserId}>
-              <td className="border border-green-800 p-2">{appointment.UserId}</td>
-              <td className="border border-green-800 p-2">{appointment.date}</td>
-              <td className="border border-green-800 p-2">{appointment.time}</td>
+              <td className="py-2 px-4 border-b border-green-800">{appointment.UserId}</td>
+              <td className="py-2 px-4 border-b border-green-800">{appointment.date}</td>
+              <td className="py-2 px-4 border-b border-green-800">{appointment.time}</td>
             </tr>
           ))}
         </tbody>

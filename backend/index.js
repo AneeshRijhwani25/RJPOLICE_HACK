@@ -12,6 +12,7 @@ const policeRoutes = require('./routes/policeRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes')
 const firRoutes = require('./routes/firRoutes')
 const feedbacksRoutes = require('./routes/feedbacksRoutes')
+const suggestionRoutes = require('./routes/suggestionRoutes')
 
 //dotenv conig
 dotenv.config();
@@ -31,6 +32,7 @@ const prepareAndStartServer = () => {
   app.use('/appointments', appointmentRoutes);
   app.use('/fir', firRoutes);
   app.use('/feedback', feedbacksRoutes);
+  app.use('/suggestions', suggestionRoutes);
 
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`.bgRed.white);

@@ -1,43 +1,26 @@
 "use client";
 import React from "react";
 import ChatBot from "react-simple-chatbot";
-import Translator from "./Translate";
 import CustomOptions from "./CustomOptions";
 import { MyComponent } from "./Star";
 
-const Chatbot = (props) => {
-  // return (
-  //   <>
-  //     <ChatBot
-  //       steps={[
-  //         {
-  //           id: "hello-world",
-  //           message: "Hello World!",
-  //           end: true,
-  //         },
-  //       ]}
-  //       floating={true}
-  //     />
-  //   </>
-  // );
+const Chatbot = () => {
   const config = {
     floating: true,
     width: "500px",
   };
-  const lang = props.lang;
+
   return (
     <div>
       <ChatBot
+        speechSynthesis={{ enable: true, lang: "en" }}
         recognitionEnable={true}
-        recognitionLang={lang}
-        speechSynthesis={{ enable: true, lang: { lang } }}
         headerTitle="AutoFeedback Bot"
         steps={[
           {
             id: "start",
             component: (
               <CustomOptions
-                lang={lang}
                 options={[{ value: 1, label: "Give Feedback", trigger: "0" }]}
               />
             ),
@@ -45,205 +28,126 @@ const Chatbot = (props) => {
           },
           {
             id: "0",
-            component: (
-              <Translator
-                text="Welcome to the Rajasthan Police Feedback System. I am here to help you.."
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
+            message:
+              "Welcome to the Rajasthan Police Feedback System. I am here to help you.",
             trigger: "5",
           },
-          // {
-          //   id: "1",
-          //   component: (
-          //     <Translator text="Please Enter your Name" targetLang={lang} />
-          //   ),
-          //   asMessage: true,
-          //   trigger: "2",
-          // },
-          // {
-          //   id: "2",
-          //   user: true,
-          //   trigger: "3",
-          // },
-          // {
-          //   id: "3",
-          //   component: (
-          //     <Translator text="Enter Your Aadhar Number" targetLang={lang} />
-          //   ),
-          //   asMessage: true,
-          //   trigger: "4",
-          // },
-          // {
-          //   id: "4",
-          //   user: true,
-          //   trigger: "5",
-          // },
+
           {
             id: "5",
-            component: (
-              <Translator text="Enter Police Station Name" targetLang={lang} />
-            ),
-            asMessage: true,
-            trigger: "6",
-          },
-          {
-            id: "6",
-            user: true,
+            message: "Enter Police Station Name",
             trigger: "7",
           },
           {
             id: "7",
-            component: (
-              <Translator
-                text="How satisfied were you with your interaction with the police?"
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
+            user: true,
             trigger: "8",
           },
           {
             id: "8",
-            user: true,
+            message:
+              "How satisfied were you with your interaction with the police?",
             trigger: "10",
           },
-          // {
-          //   id: "9",
-          //   component: <Translator text="Thank You!" targetLang={lang} />,
-          //   asMessage: true,
-          //   trigger: "10",
-          // },
           {
             id: "10",
             component: (
-              <Translator
-                text="Did the police officers treat you respectfully?"
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
-            trigger: "11",
-          },
-          {
-            id: "11",
-            component: (
               <CustomOptions
-                lang={lang}
                 options={[
-                  { value: "a", label: "Yes", trigger: "12" },
-                  { value: "b", label: "No", trigger: "12" },
+                  { value: "v", label: "5-Very satisfied", trigger: "11" },
+                  { value: "w", label: "4-Satisfied", trigger: "11" },
+                  { value: "x", label: "3-Neutral", trigger: "11" },
+                  { value: "y", label: "2-Dissatisfied", trigger: "11" },
+                  { value: "z", label: "1-Very Dissatified", trigger: "11" },
                 ]}
               />
             ),
             asMessage: true,
+          },
+
+          {
+            id: "11",
+            message: "Did the police officers treat you respectfully?",
+            trigger: "12",
           },
           {
             id: "12",
             component: (
-              <Translator
-                text="Did the police officers communicate clearly and effectively?"
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
-            trigger: "13",
-          },
-          {
-            id: "13",
-            component: (
               <CustomOptions
-                lang={lang}
                 options={[
-                  { value: "c", label: "Yes", trigger: "14" },
-                  { value: "d", label: "No", trigger: "14" },
+                  { value: "a", label: "Yes", trigger: "13" },
+                  { value: "b", label: "No", trigger: "13" },
                 ]}
               />
             ),
             asMessage: true,
+          },
+          {
+            id: "13",
+            message:
+              "Did the police officers communicate clearly and effectively?",
+            trigger: "14",
           },
           {
             id: "14",
             component: (
-              <Translator
-                text="Were the police officers professional in their conduct?"
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
-            trigger: "15",
-          },
-          {
-            id: "15",
-            component: (
               <CustomOptions
-                lang={lang}
                 options={[
-                  { value: "c", label: "Yes", trigger: "16" },
-                  { value: "d", label: "No", trigger: "16" },
+                  { value: "c", label: "Yes", trigger: "15" },
+                  { value: "d", label: "No", trigger: "15" },
                 ]}
               />
             ),
             asMessage: true,
           },
           {
+            id: "15",
+            message: "Were the police officers professional in their conduct?",
+            trigger: "16",
+          },
+          {
             id: "16",
             component: (
-              <Translator
-                text="How much would you rate the overall service provided by the police out of 5?"
-                targetLang={lang}
+              <CustomOptions
+                options={[
+                  { value: "c", label: "Yes", trigger: "17" },
+                  { value: "d", label: "No", trigger: "17" },
+                ]}
               />
             ),
             asMessage: true,
-            trigger: "17",
           },
           {
             id: "17",
+            message:
+              "How much would you rate the overall service provided by the police out of 5?",
+            trigger: "18",
+          },
+          {
+            id: "18",
             component: <MyComponent />,
             asMessage: true,
           },
           {
-            id: "18",
-            component: (
-              <Translator
-                text="Thank you for your feedback !!!"
-                targetLang={lang}
-              />
-            ),
-            asMessage: true,
-            trigger: "ab",
-          },
-          {
             id: "ab",
-            component: <Translator text="Any suggestions?" targetLang={lang} />,
+            message: "Any suggestions?",
             asMessage: true,
             trigger: "ac",
           },
           {
             id: "ac",
             user: true,
+            trigger: "last",
+          },
+          {
+            id: "last",
+            message: "Thank You!Your feedback has been recorded",
+            asMessage: true,
             trigger: "end",
           },
-
-          // {
-          //   id: "ch",
-          //   component: (
-          //     <CustomOptions
-          //       lang={lang}
-          //       options={[
-          //         { value: 1, label: "Provide Another Feedback", trigger: "1" },
-          //         { value: 2, label: "Quit", trigger: "end" },
-          //       ]}
-          //     />
-          //   ),
-          //   asMessage: true,
-          // },
           {
             id: "end",
-            component: (
-              <Translator text="Have a good day!!" targetLang={lang} />
-            ),
+            message: "Have a good day!!",
             asMessage: true,
             end: true,
           },

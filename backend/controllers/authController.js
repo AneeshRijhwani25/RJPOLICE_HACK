@@ -1,3 +1,4 @@
+const User = require('../models/user');
 const authService = require('../services/authService');
 
 const register = async (req, res) => {
@@ -12,7 +13,7 @@ const register = async (req, res) => {
 
     await authService.isValidAadhaar(adharNumber);
 
-  
+
     const emailValidator = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     if (!emailValidator.test(email)) {
       throw new Error("Invalid email format");
@@ -55,7 +56,26 @@ const login = async (req, res) => {
   }
 };
 
+const getUser = (req, res) => {
+  const UserId = req.body;
+  console.log(UserId)
+
+  User.findOne({ _id:UserId}, (err
+    , result) => {
+    if (!err) {
+      res.send(result);
+    } else {
+      console.log(err);
+      res.status(404).send();
+    }
+  }
+  )
+}
+
+
+
 module.exports = {
   register,
   login,
+  getUser
 };

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import jwt from "jsonwebtoken";
+import { sendFIRRegistrationSMS } from '../app/smstool/page';
 
 const AdminRegisterFIR = () => {
   const [userId, setUserId] = useState("");
@@ -39,10 +40,11 @@ const AdminRegisterFIR = () => {
           Description: firDescription,
         }),
       });
-
+      console.log(response)
       if (response.ok) {
 
         alert("FIR registered successfully!");
+        // sendFIRRegistrationSMS(userId, firId);
         window.location.reload()
       } else {
         // Handle FIR registration error
