@@ -70,7 +70,7 @@ const Feedback = ({ params }) => {
       const token = localStorage.getItem("token");
       if (!token) {
         // Redirect to the home page if the token is not present
-        router.push("/");
+        router.push("/login/user");
         return;
       }
 

@@ -81,6 +81,8 @@ const AdminRequestedAppointments = () => {
         }),
       });
 
+      
+
       // After a successful update, fetch the updated list of requested appointments
       fetchRequestedAppointments();
     } catch (error) {

@@ -4,9 +4,9 @@ import React from "react";
 
 const Features = () => {
   return (
-    <section className="flex-col flex-center overflow-hidden bg-feature-bg bg-center bg-no-repeat py-8 md:py-24 m-8">
+    <section className="flex-col flex-center overflow-hidden bg-feature-bg bg-center bg-no-repeat pb-8 pt-12 m-8">
       <div className="max-container padding-container relative w-full flex justify-end">
-        <div className="flex flex-1 lg:min-h-[900px]">
+        <div className="hidden lg:inline-block flex-1 lg:min-h-[900px]">
           <Image
             src="/Questions-pana.png"
             alt="phone"
@@ -23,11 +23,11 @@ const Features = () => {
               alt="camp"
               width={50}
               height={50}
-              className="absolute left-[-5px] top-[-28px] w-10 lg:w-[50px]"
+              className="absolute left-[-5px] top-[-28px] w-10 lg:w-[50px] "
             />
             <h2 className="font-bold text-4xl lg:text-6xl">How it works?</h2>
           </div>
-          <ul className="mt-10 grid gap-10 md:grid-cols-2 lg:mg-20 lg:gap-20">
+          <ul className="mt-10 grid gap-10 md:grid-cols-2 lg:grid-cols-2 lg:gap-20">
             {FEATURES.map((feature) => (
               <FeatureItem
                 key={feature.title}

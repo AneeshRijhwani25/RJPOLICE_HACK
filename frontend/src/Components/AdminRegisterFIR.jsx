@@ -1,15 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import jwt from "jsonwebtoken";
-import { sendFIRRegistrationSMS } from '../app/smstool/page';
-
 const AdminRegisterFIR = () => {
   const [userId, setUserId] = useState("");
   const [firTitle, setFIRTitle] = useState("");
-  
   const [firDescription, setFIRDescription] = useState("");
   const [policeId, setPoliceId] = useState("");
-  console.log(policeId)
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +22,7 @@ const AdminRegisterFIR = () => {
     } else {
       console.error("Token not found in localStorage");
     }
-    
+
     try {
       const response = await fetch("http://localhost:3005/fir/create", {
         method: "POST",
@@ -34,18 +30,36 @@ const AdminRegisterFIR = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          UserId:userId,
+          UserId: userId,
           PoliceId: policeId,
-          Title:firTitle,
+          Title: firTitle,
           Description: firDescription,
         }),
       });
-      console.log(response)
-      if (response.ok) {
 
+      if (response.ok) {
+        const data = await response.json();
+        const firId = data.data.fir._id;
         alert("FIR registered successfully!");
-        // sendFIRRegistrationSMS(userId, firId);
-        window.location.reload()
+
+        // Call the server-side handler
+        const smsResponse = await fetch("http://localhost:3005/sms/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            firId: firId,
+          }),
+        });
+
+        if (smsResponse.ok) {
+          const smsData = await smsResponse.json();
+          console.log("SMS sent successfully:", smsData);
+        } else {
+          console.error("Failed to send SMS:", smsResponse.statusText);
+        }
       } else {
         // Handle FIR registration error
         const data = await response.json();
@@ -55,7 +69,6 @@ const AdminRegisterFIR = () => {
       console.error("Error during FIR registration:", error);
     }
   };
-
   return (
     <main className="container mx-auto p-4">
       <div className="bg-white p-8 max-w-xl mx-auto rounded-md shadow-md">

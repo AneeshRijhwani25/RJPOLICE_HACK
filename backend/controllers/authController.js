@@ -56,21 +56,24 @@ const login = async (req, res) => {
   }
 };
 
-const getUser = (req, res) => {
-  const UserId = req.body;
-  console.log(UserId)
+const getUser = async (req, res) => {
+  try {
+    const UserId = req.params.userId;
 
-  User.findOne({ _id:UserId}, (err
-    , result) => {
-    if (!err) {
-      res.send(result);
-    } else {
-      console.log(err);
-      res.status(404).send();
+    // Assuming you have a 'User' model defined
+    const user = await User.findOne({ _id: UserId });
+    console.log(user)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Return the user data in the response
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  )
-}
+};
 
 
 

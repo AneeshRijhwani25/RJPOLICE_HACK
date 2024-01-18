@@ -7,37 +7,37 @@ const AdminRegisteredFIR = () => {
   const [policeId, setPoliceId] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchRegisteredFIRs = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  const fetchRegisteredFIRs = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        if (token) {
-          try {
-            const decodedToken = jwt.decode(token);
-            setPoliceId(decodedToken.user._id);
+      if (token) {
+        try {
+          const decodedToken = jwt.decode(token);
+          setPoliceId(decodedToken.user._id);
 
-            const response = await fetch(`http://localhost:3005/fir/pol/${decodedToken.user._id}`);
-            
-            if (response.ok) {
-              const data = await response.json();
-              setRegisteredFIRs(data.data.firList);
-            } else {
-              console.error("Failed to fetch registered FIRs");
-            }
-          } catch (error) {
-            console.error("Token decoding failed:", error.message);
+          const response = await fetch(`http://localhost:3005/fir/pol/${decodedToken.user._id}`);
+          
+          if (response.ok) {
+            const data = await response.json();
+            setRegisteredFIRs(data.data.firList);
+          } else {
+            console.error("Failed to fetch registered FIRs");
           }
-        } else {
-          console.error("Token not found in localStorage");
+        } catch (error) {
+          console.error("Token decoding failed:", error.message);
         }
-      } catch (error) {
-        console.error("Error during FIR fetch:", error);
-      } finally {
-        // Set loading to false regardless of success or failure
-        setLoading(false);
+      } else {
+        console.error("Token not found in localStorage");
       }
-    };
+    } catch (error) {
+      console.error("Error during FIR fetch:", error);
+    } finally {
+      // Set loading to false regardless of success or failure
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
 
     fetchRegisteredFIRs();
   }, [/* Any additional dependencies you may need to include here */]);
@@ -52,9 +52,29 @@ const AdminRegisteredFIR = () => {
       );
 
       if (response.ok) {
-        console.log("FIR resolved successfully!");
-        // After successful resolution, fetch updated list of registered FIRs
-        fetchRegisteredFIRs();
+        alert("FIR resolved successfully!");
+        const fir = await fetch(`http://localhost:3005/fir/${firId}`)
+        const firdata = await fir.json();
+        const {UserId} = firdata.data.fir
+        console.log("Id",UserId)
+        const smsResponse = await fetch("http://localhost:3005/sms/resolve", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: UserId,
+            firId: firId,
+          }),
+        });
+
+        if (smsResponse.ok) {
+          const smsData = await smsResponse.json();
+          console.log("SMS sent successfully:", smsData);
+        } else {
+          console.error("Failed to send SMS:", smsResponse.statusText);
+        }
+        await fetchRegisteredFIRs();
       } else {
         const data = await response.json();
         console.error("FIR resolution failed:", data.message);

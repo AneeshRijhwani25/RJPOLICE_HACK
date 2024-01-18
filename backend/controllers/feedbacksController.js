@@ -7,7 +7,7 @@ const createFeedback = async (req, res) => {
     try {
         const feedbackData = req.body;
         const feedback = await feedbacksService.createFeedback(feedbackData);
-
+        console.log(feedback)
         const firId = feedbackData.FirId;
         await FIR.findByIdAndUpdate(firId, { $push: { feedbacks: feedback._id } });
 
@@ -34,7 +34,6 @@ const getFeedbackByPId = async (req, res) => {
     let pid = req.params.policeId;
     try {
         const feedbackList = await feedbacksService.getFeedbacksByPId(pid);
-        console.log(feedbackList)
         if (!feedbackList) {
             throw new Error('No Feedback found')
         }

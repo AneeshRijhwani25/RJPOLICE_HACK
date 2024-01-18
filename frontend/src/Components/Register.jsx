@@ -1,5 +1,9 @@
+
 "use client";
-import React from "react";
+
+
+
+import React, { useState, useEffect } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { MdLockOutline } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
@@ -13,23 +17,10 @@ import {
 } from "firebase/auth";
 import { app } from "../app/config";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-
-
-// const router = useRouter();
-//   const auth = getAuth(app);
-
-//   useEffect(() => {
-//     onAuthStateChanged(auth, (user) => {
-//       if (user) {
-//         router.push("../app/dashboard");
-//       }
-//     });
-//   }, [auth, router]);
 
 const Register = () => {
-  const apiUrl= process.env.API;
-  console.log(apiUrl);
+  const auth = getAuth(app);
+  const router = useRouter();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
@@ -39,38 +30,6 @@ const Register = () => {
   const [aadhar, setAadhar] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      name,
-      adharNumber: aadhar,
-      email,
-      phoneNo: phoneNumber,
-      password,
-    };
-    console.log(formData);
-    try {
-      const response = await fetch(`http://localhost:3005/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      if (response.ok) {
-        router.push('/login/user')
-      } else {
-        alert("Registration failed");
-      }
-    } catch (error) {
-      console.error("Error during registration:", error);
-    }
-  };
-  const auth = getAuth(app);
-  const router = useRouter();
 
   useEffect(() => {
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -99,15 +58,12 @@ const Register = () => {
   const handleSendOtp = async (e) => {
     try {
       e.preventDefault();
-      const formattedPhoneNumber = `+${phoneNumber.replace(/\D/g, "")}`;
-      console.log(formattedPhoneNumber);
-      console.log(auth);
+      const formattedPhoneNumber = `+91${phoneNumber.replace(/\D/g, "")}`;
       const confirmation = await signInWithPhoneNumber(
         auth,
         formattedPhoneNumber,
         window.recaptchaVerifier
       );
-      console.log(confirmation);
       setConfirmationResult(confirmation);
       setOtpSent(true);
       setPhoneNumber("");
@@ -124,6 +80,36 @@ const Register = () => {
       // router.push("/dashboard");
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = {
+      name,
+      adharNumber: aadhar,
+      email,
+      phoneNo: phoneNumber,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://localhost:3005/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        router.push("/login");
+      } else {
+        alert("Registration failed");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
     }
   };
 
@@ -160,7 +146,7 @@ const Register = () => {
                 <input
                   type="text"
                   name="aadhar"
-                  placeholder="16 digits AADHAR Number "
+                  placeholder="12 digits AADHAR Number "
                   onChange={(e) => {
                     setAadhar(e.target.value);
                   }}
@@ -193,11 +179,16 @@ const Register = () => {
                   onClick={otpSent ? handleOTPSubmit : handleSendOtp}
                   className="border-2 border-green-500 text-green-500 rounded-full px-4  inline-block text-[10px] hover:bg-green-500 hover:text-white "
                 >
-                  {otpSent ? "Submit OTP" : "Send OTP"}
+                  {otpSent ? "OTP sent" : "Send OTP"}
                 </button>
               </div>
               <div className="bg-gray-100 w-72 p-2 flex items-center mb-3">
-                {!otpSent ? <div id="recaptcha-container"></div> : null}
+                {!otpSent ? (
+                  <div
+                    className="recaptcha-container"
+                    id="recaptcha-container"
+                  ></div>
+                ) : null}
                 <input
                   type="text"
                   name="otp"

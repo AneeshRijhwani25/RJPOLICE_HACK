@@ -5,6 +5,7 @@ import Footer from "../../../Components/Footer";
 import Hero from "@/Components/Home";
 import Features from "@/Components/Features";
 import Abilities from "@/Components/Abilities";
+import Suggestions from "@/Components/Suggestions";
 const Dashboard = () => {
   return (
     <>
@@ -14,6 +15,7 @@ const Dashboard = () => {
       <div id="book">
         <Abilities />
       </div>
+      <Suggestions/>
       <Footer />
     </>
   );

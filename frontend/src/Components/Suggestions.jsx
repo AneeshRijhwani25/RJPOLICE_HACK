@@ -66,10 +66,10 @@ function Suggestions() {
   return (
     <>
       <main className="container mx-auto p-4">
+        <div className="text-3xl font-bold mb-4 text-green-500 text-center">
+          General Suggestions
+        </div>
         <div className="bg-white p-8 max-w-xl mx-auto rounded-md shadow-md">
-          <div className="text-3xl font-bold mb-4 text-green-500">
-            General Suggestions
-          </div>
           <form className="max-w-full" onSubmit={handleSubmit}>
             <div className="mb-4">
               <label

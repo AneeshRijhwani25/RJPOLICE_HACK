@@ -15,9 +15,9 @@ const page = () => {
         <AdminAbilities />
       </div>
       <AdminView/>
-      {/* <div>
-        <FeedbackPieChart />
-      </div> */}
+      <div>
+        <FeedbackPieChart/>
+      </div>
       <Footer />
     </div>
   );
