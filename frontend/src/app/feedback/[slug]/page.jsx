@@ -7,7 +7,7 @@ const page = ({params}) => {
   return (
     <div>
       <Feedback params={params} />
-      {/* <Chatbot/> */}
+      <Chatbot/>
     </div>
   );
 };
